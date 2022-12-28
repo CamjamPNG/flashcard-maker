@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GPT-3 Demo</title>
+    <style>
+      body {
+        font-family: 'Pretendard';
+        font-size: 18px;
+        margin: 0 auto;
+        padding: 10px;
+        background-color: #f2f2f2;
+      }
+
+      h1 {
+        font-weight: bold;
+        font-size: 40px;
+        color: #000000;
+        margin-bottom: 5px;
+        text-align: center;
+      }
+
+      form {
+        background-color: #ffffff;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      label {
+        font-weight: bold;
+        font-size: 16px;
+        color: #000000;
+      }
+
+      input {
+        width: 98%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 12px;
+        border: 1px solid #cccccc;
+        border-radius: 10px;
+      }
+
+      button {
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #000000;
+        color: #ffffff;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+      }
+
+      #output {
+        margin-top: 16px;
+        background-color: #ffffff;
+        padding: 16px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Flash Card Maker</h1>
+    <form>
+      <label for="prompt">Enter OpenAI API Key:</label><br>
+      <input type="text" id="API_KEY" name="API_KEY"><br>
+      <label for="prompt">Enter Text To Get Words From:</label><br>
+      <input type="text" id="prompt" name="prompt"><br>
+      <label for="language">Select Language:</label><br>
+      <select id="language">
+        <option value="Spanish">Spanish</option>
+        <option value="French">French</option>
+        <option value="Italian">Italian</option>
+        <option value="German">German</option>
+        <option value="Chinese">Chinese</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Russian">Russian</option>
+        <option value="Portuguese">Portuguese</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Korean">Korean</option>
+        <option value="Polish">Polish</option>
+        <option value="Vietnamese">Vietnamese</option>
+        <option value="Indonesian">Indonesian</option>
+        <option value="Turkish">Turkish</option>
+        <option value="Greek">Greek</option>
+      </select>
+      <br>
+      <br>
+      <button type="button" onclick="generateText()">
+        Flash Cards (Press a few times untill good)
+      </button>
+    </form>
+    <div id="output"></div>
+    <script>
+
+      // Function to generate text from a given prompt
+      function generateText() {
+        // Get prompt from form
+        const prompt = document.getElementById('prompt').value;
+        const language = document.getElementById('language').value;
+        const API_KEY = document.getElementById('API_KEY').value;
+
+        // Create request to OpenAI GPT-3 API
+        const request = new XMLHttpRequest();
+        request.open('POST', 'https://api.openai.com/v1/completions');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.setRequestHeader('Authorization', `Bearer ${API_KEY}`);
+
+        // Handle response from OpenAI GPT-3 API
+        request.onload = () => {
+          const response = JSON.parse(request.responseText);
+          document.getElementById('output').innerHTML = response.choices[0].text;
+        };
+
+        // Send request to OpenAI GPT-3 API
+        request.send(
+          JSON.stringify({
+            model: 'text-davinci-003',
+            prompt: `"${prompt}".
+            take the most important words out of whats in "" and can you put the ${language} 
+            and english on the same line without it saying ${language} 
+            and english and have then seperated by a -. Have flashcards be seperated by a semi colon.`,
+            max_tokens: 1024,
+          })
+        );
+      }
+    </script>
+  </body>
+</html>
