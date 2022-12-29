@@ -181,18 +181,17 @@ LANGUAGE: ${language}`,
         );
       }
       </script>
-      <button>
-        Copy
-      </button>
- 
- <script>
+         <script>
 //Function to copy text from output
 function copyText() {
   const outputText = document.getElementById('output').innerHTML;
   navigator.clipboard.writeText(outputText);
 }
- <</script>
-	  
+ </script>
+ 
+ <button onclick="copyText()">
+   Copy
+ </button>
     <footer>
       <p>Created by <a href="https://twitter.com/camjampng">@camjampng</a> | Source code available at <a href="https://github.com/CamjamPNG/flashcard-maker">Github</a></p>
     </footer>
