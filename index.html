@@ -157,6 +157,7 @@
           document.getElementById('output').innerHTML = response.choices[0].text;
         };
 
+
         // Send request to OpenAI GPT-3 API
         request.send(
           JSON.stringify({
@@ -185,12 +186,13 @@ LANGUAGE: ${language}`,
       </button>
  
  <script>
-
 //Function to copy text from output
 function copyText() {
   const outputText = document.getElementById('output').innerHTML;
   navigator.clipboard.writeText(outputText);
 }
+ <</script>
+	  
     <footer>
       <p>Created by <a href="https://twitter.com/camjampng">@camjampng</a> | Source code available at <a href="https://github.com/CamjamPNG/flashcard-maker">Github</a></p>
     </footer>
