@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title> Flashcard Maker </title>
+    <title> Phrontize </title>
     <style>
       body {
         font-family: 'Pretendard';
@@ -13,6 +14,7 @@
       
      img {
   		display: inline-block;
+        padding: 10px;
 		}
 
       h1 {
@@ -37,6 +39,13 @@
         margin-bottom: 5px;
         text-align: center;
       }
+      
+      h6 {
+        font-weight: bold;
+        font-size: 18px;
+        color: #000000;
+        margin-bottom: 5px;
+      }
 
       form {
         background-color: #ffffff;
@@ -60,7 +69,7 @@
         border-radius: 10px;
       }
 
-      button {
+        button {
         font-size: 16px;
         font-weight: bold;
         background-color: #000000;
@@ -68,7 +77,12 @@
         padding: 12px;
         border: none;
         border-radius: 10px;
-      }
+        transition: all 0.2s;
+    }
+
+    button:hover {
+        transform: scale(1.0375);
+    }
 
       #output {
         margin-top: 16px;
@@ -77,45 +91,53 @@
         border-radius: 10px;
         box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
       }
-    </style>
+        </style>
   </head>
   <body>
-    <h1>Flash Card Maker</h1>
+    <h1>Phrontize</h1>
     <h4>Automaticly Made Quizlet FlashCards </h4>
     <form>
-      <label for="prompt">Enter OpenAI API Key: <a href="https://beta.openai.com/account/api-keys">(Where To Get Key?)</a></label><br>
+      <label for="prompt">Enter OpenAI API Key: <a href="https://beta.openai.com/account/api-keys">(Where To Get A Key?)</a></label><br>
       <input type="text" id="API_KEY" name="API_KEY"><br>
       <label for="prompt">Enter Text To Get Words From:</label><br>
       <input type="text" id="prompt" name="prompt"><br>
-      <label for="language">Select Language:</label><br>
-      <select id="language">
-        <option value="Spanish">Spanish</option>
-        <option value="French">French</option>
-        <option value="Italian">Italian</option>
-        <option value="German">German</option>
-        <option value="Chinese">Chinese</option>
-        <option value="Japanese">Japanese</option>
-        <option value="Russian">Russian</option>
-        <option value="Portuguese">Portuguese</option>
-        <option value="Hindi">Hindi</option>
-        <option value="Arabic">Arabic</option>
-        <option value="Korean">Korean</option>
-        <option value="Polish">Polish</option>
-        <option value="Vietnamese">Vietnamese</option>
-        <option value="Indonesian">Indonesian</option>
-        <option value="Turkish">Turkish</option>
-        <option value="Thai">Thai</option>
-        <option value="Greek">Greek</option>
-      </select>
+     <label for="language">Select Language:</label><br>
+     
+<select id="language" style="width: 150px; font-size: 14px; font-family: 'Pretendard'; padding: 6px 5px; border-radius: 10px; border: 1px solid #ccc;">
+        <option value="Mandarin">Mandarin</option>
+		<option value="Spanish">Spanish</option>
+		<option value="Hindi">Hindi</option>
+		<option value="Arabic">Arabic</option>
+		<option value="Portuguese">Portuguese</option>
+		<option value="Bengali">Bengali</option>
+		<option value="Russian">Russian</option>
+		<option value="Japanese">Japanese</option>
+		<option value="Punjabi">Punjabi</option>
+		<option value="German">German</option>
+		<option value="Javanese">Javanese</option>
+		<option value="Malay">Malay</option>
+		<option value="Telugu">Telugu</option>
+		<option value="Vietnamese">Vietnamese</option>
+		<option value="Korean">Korean</option>
+		<option value="French">French</option>
+		<option value="Marathi">Marathi</option>
+		<option value="Tamil">Tamil</option>
+		<option value="Urdu">Urdu</option>
+		<option value="Turkish">Turkish</option>
+		<option value="Italian">Italian</option>
+		<option value="Thai">Thai</option>
+</select>
+
       <br>
       <br>
       <button type="button" onclick="generateText()">
-        Flash Cards (Press a few times untill good)
+        Generate
       </button>
     </form>
     
-    <h5> Once you have finished generating the text, you can copy the response and use it to create a flash card set on <a href="https://quizlet.com/create-set">Quizlet</a>. The thing that separates the front and back of the flashcards is "-" and the thing that separates the flashcards is ";".  </h5>
-    <img src="https://cdn.discordapp.com/attachments/707039497166127144/1057773544534179941/image.png" alt="Imiage of the settings">
+    <h5> Once finished generating text, copy and use to create a flash card set on Quizlet: "-" separates front/back; ";" separates cards. </h5>
+    <img src="https://cdn.discordapp.com/attachments/707039497166127144/1057773544534179941/image.png" alt="Imagine of the settings">
+    <h6> FlashCards: </h6>
     <div id="output"></div>
     <script>
 
@@ -142,14 +164,38 @@
         request.send(
           JSON.stringify({
             model: 'text-davinci-003',
-            prompt: `"${prompt}".
-            take the most important words, up to 3 words per flashcard. out of whats in "" and can you put the ${language} 
-            and english on the same line without it saying ${language} 
-            and english and have then seperated by a -. Have flashcards be seperated by a semi colon.`,
+            prompt: `"You are a Translator Parser AI. Your role is to take a paragraph from the user, extract the most important words from it, and translate them to the requested language.
+
+FORMATTING RULES:
+Output the most important words in the following format:
+{English Word} - {Word translated to requested language}
+
+EXAMPLE:
+INPUT: The quick brown fox jumps over the lazy dog
+LANGUAGE: Portuguese
+
+fox - raposa; quick - rápido; lazy - preguiçoso
+
+INPUT: ${prompt}
+LANGUAGE: ${language}`,
             max_tokens: 256,
           })
         );
       }
-    </script>
+      </script>
+      <button>
+        Copy
+      </button>
+ 
+ <script>
+
+//Function to copy text from output
+function copyText() {
+  const outputText = document.getElementById('output').innerHTML;
+  navigator.clipboard.writeText(outputText);
+}
+    <footer>
+      <p>Created by <a href="https://twitter.com/camjampng">@camjampng</a> | Source code available at <a href="https://github.com/CamjamPNG/flashcard-maker">Github</a></p>
+    </footer>
   </body>
 </html>
